@@ -11,6 +11,7 @@ import { FloatingWhatsAppWidget } from './components/FloatingWhatsAppWidget';
 import { EnglishPage } from './pages/EnglishPage';
 import { ComputerPage } from './pages/ComputerPage';
 import { LPKPage } from './pages/LPKPage';
+import { StudentMobileApp } from './components/StudentMobileApp';
 import { INSTITUTION_INFO } from './data/programs';
 import { ArrowRight, MapPin, ShieldCheck } from 'lucide-react';
 
@@ -243,10 +244,20 @@ export function App() {
             <CertificateVerificationWidget />
           </div>
         )}
+
+        {/* ======================================================== */}
+        {/* PAGE 6: STUDENT MOBILE APP INTERACTIVE SIMULATOR */}
+        {/* ======================================================== */}
+        {activeTab === 'mobile-app' && (
+          <div className="w-full">
+            <StudentMobileApp onBackToPortal={() => handleSelectTab('home')} />
+          </div>
+        )}
       </main>
 
-      {/* 4. FOOTER RESMI DI PALING BAWAH HALAMAN */}
-      <footer className="border-t border-slate-200 bg-white py-14 px-4 text-xs text-slate-500">
+      {/* 4. FOOTER RESMI DI PALING BAWAH HALAMAN (Kecuali Saat Membuka Mobile App) */}
+      {activeTab !== 'mobile-app' && (
+        <footer className="border-t border-slate-200 bg-white py-14 px-4 text-xs text-slate-500">
         <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
           <div className="space-y-3">
             <div className="flex items-center gap-2">
@@ -306,6 +317,7 @@ export function App() {
           <p>Terdaftar resmi di Disnaker & Disdik Kabupaten Bandung, Jawa Barat.</p>
         </div>
       </footer>
+      )}
 
       {/* MODAL PENDAFTARAN */}
       <RegisterModal

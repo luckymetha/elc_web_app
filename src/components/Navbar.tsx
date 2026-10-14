@@ -103,6 +103,18 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, onSelectTab, onOpenRe
           </a>
 
           <button
+            onClick={() => onSelectTab('mobile-app')}
+            className={`px-3.5 py-2 rounded-2xl text-xs font-black flex items-center gap-1.5 transition-all cursor-pointer ${
+              activeTab === 'mobile-app'
+                ? 'bg-slate-900 text-white shadow-md'
+                : 'bg-white hover:bg-amber-50 text-slate-800 border border-amber-300 shadow-2xs'
+            }`}
+          >
+            <span>📱</span>
+            <span>Mobile App Siswa</span>
+          </button>
+
+          <button
             onClick={onOpenRegisterModal}
             className="px-5 py-2.5 rounded-2xl bg-gradient-to-r from-orange-500 via-amber-500 to-rose-500 hover:from-orange-600 hover:to-rose-600 text-white text-xs font-black shadow-md shadow-orange-500/25 hover:shadow-orange-500/35 transition-all flex items-center gap-2 group cursor-pointer"
           >
