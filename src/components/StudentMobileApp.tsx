@@ -19,7 +19,8 @@ import {
   ShieldCheck,
   Download
 } from 'lucide-react';
-import { StudentUser, MOCK_STUDENTS } from '../data/studentData';
+import type { StudentUser } from '../data/studentData';
+import { MOCK_STUDENTS } from '../data/studentData';
 
 interface StudentMobileAppProps {
   onBackToPortal: () => void;
