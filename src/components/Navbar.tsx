@@ -11,7 +11,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, onSelectTab, onOpenRe
     <header className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-[#fbfbf9]/90 border-b border-amber-200/60 shadow-xs transition-all">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
         {/* Brand Logo with Warm Cheerful Look */}
-        <div className="flex items-center gap-3 cursor-pointer group" onClick={() => onSelectTab('english')}>
+        <div className="flex items-center gap-3 cursor-pointer group" onClick={() => onSelectTab('home')}>
           <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-500 via-orange-500 to-rose-500 flex items-center justify-center shadow-md shadow-orange-500/25 ring-4 ring-amber-100 group-hover:scale-105 transition-transform">
             <span className="font-black text-2xl text-white tracking-wider font-nunito">ELC</span>
           </div>

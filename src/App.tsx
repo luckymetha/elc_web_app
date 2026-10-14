@@ -138,6 +138,31 @@ export function App() {
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </div>
                 </div>
+              {/* Banner Interaktif: Akses Student Mobile App */}
+              <div 
+                onClick={() => handleSelectTab('mobile-app')}
+                className="mt-6 p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-slate-900 via-slate-800 to-amber-950 text-white shadow-xl flex flex-col md:flex-row items-center justify-between gap-6 cursor-pointer hover:border-amber-400 border border-amber-300/40 transition-all group"
+              >
+                <div className="space-y-2 text-center md:text-left">
+                  <div className="flex items-center gap-2 justify-center md:justify-start">
+                    <span className="px-3 py-1 bg-amber-500 text-slate-900 text-xs font-black rounded-full flex items-center gap-1.5 shadow-xs">
+                      <span>📱 Fitur Baru Siswa</span>
+                    </span>
+                    <span className="text-xs text-amber-200 font-bold">
+                      Aplikasi Pembelajaran & Absensi Digital
+                    </span>
+                  </div>
+                  <h3 className="text-xl sm:text-2xl font-black tracking-tight">
+                    Buka Student Mobile App ELC
+                  </h3>
+                  <p className="text-xs sm:text-sm text-slate-300 font-semibold max-w-xl">
+                    Dilengkapi modul belajar sesuai program, jadwal les, kartu pelajar digital resmi, riwayat scan presensi QR, dan sertifikat digital.
+                  </p>
+                </div>
+                <div className="shrink-0 flex items-center gap-2 px-6 py-3.5 bg-gradient-to-r from-amber-500 to-orange-500 rounded-2xl font-black text-xs text-white shadow-md group-hover:scale-105 transition-transform">
+                  <span>Coba Aplikasi Mobile</span>
+                  <ArrowRight className="w-4 h-4" />
+                </div>
               </div>
             </div>
 
