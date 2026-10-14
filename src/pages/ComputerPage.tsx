@@ -1,16 +1,8 @@
 import React from 'react';
 import { 
-  Laptop, 
-  Sparkles, 
   CheckCircle2, 
   ArrowRight, 
-  FileSpreadsheet, 
-  PenTool, 
-  Cpu, 
-  Layers,
   Award,
-  Calendar,
-  Clock,
   Check
 } from 'lucide-react';
 

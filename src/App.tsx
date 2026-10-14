@@ -138,6 +138,8 @@ export function App() {
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </div>
                 </div>
+              </div>
+
               {/* Banner Interaktif: Akses Student Mobile App */}
               <div 
                 onClick={() => handleSelectTab('mobile-app')}

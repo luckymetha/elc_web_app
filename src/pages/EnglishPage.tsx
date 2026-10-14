@@ -1,17 +1,11 @@
 import React from 'react';
 import { 
-  Sparkles, 
   Award, 
-  CheckCircle2, 
   ArrowRight, 
-  BookOpen, 
   Users, 
-  Volume2, 
-  FileText,
-  Calendar,
-  Clock,
-  MapPin,
-  Check
+  Calendar, 
+  Clock, 
+  Check 
 } from 'lucide-react';
 import { DailyLearningLab } from '../components/DailyLearningLab';
 import { PortraitGrammarAndStories } from '../components/PortraitGrammarAndStories';

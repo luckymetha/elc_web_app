@@ -4,23 +4,17 @@ import {
   BookOpen, 
   QrCode, 
   Award, 
-  Calendar, 
-  Clock, 
   MapPin, 
   CheckCircle2, 
   PlayCircle, 
-  FileText, 
   Lock, 
   ChevronRight, 
-  ArrowLeft,
-  Sparkles,
-  LogOut,
-  UserCheck,
-  ShieldCheck,
-  Download,
-  KeyRound,
-  AlertCircle,
-  Camera
+  ArrowLeft, 
+  LogOut, 
+  Download, 
+  KeyRound, 
+  AlertCircle, 
+  Camera 
 } from 'lucide-react';
 
 interface StudentMobileAppProps {

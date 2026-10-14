@@ -1,15 +1,7 @@
 import React from 'react';
 import { 
-  Building2, 
-  Sparkles, 
-  CheckCircle2, 
   ArrowRight, 
   ShieldCheck, 
-  GraduationCap, 
-  Briefcase, 
-  FileCheck,
-  Award,
-  Users,
   Check
 } from 'lucide-react';
 
