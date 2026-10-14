@@ -12,8 +12,9 @@ import { EnglishPage } from './pages/EnglishPage';
 import { ComputerPage } from './pages/ComputerPage';
 import { LPKPage } from './pages/LPKPage';
 import { StudentMobileApp } from './components/StudentMobileApp';
+import { BackofficeDashboard } from './components/BackofficeDashboard';
 import { INSTITUTION_INFO } from './data/programs';
-import { ArrowRight, MapPin, ShieldCheck } from 'lucide-react';
+import { ArrowRight, MapPin, ShieldCheck, Database } from 'lucide-react';
 
 export function App() {
   const [activeTab, setActiveTab] = useState<string>('home');
@@ -140,30 +141,61 @@ export function App() {
                 </div>
               </div>
 
-              {/* Banner Interaktif: Akses Student Mobile App */}
-              <div 
-                onClick={() => handleSelectTab('mobile-app')}
-                className="mt-6 p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-slate-900 via-slate-800 to-amber-950 text-white shadow-xl flex flex-col md:flex-row items-center justify-between gap-6 cursor-pointer hover:border-amber-400 border border-amber-300/40 transition-all group"
-              >
-                <div className="space-y-2 text-center md:text-left">
-                  <div className="flex items-center gap-2 justify-center md:justify-start">
-                    <span className="px-3 py-1 bg-amber-500 text-slate-900 text-xs font-black rounded-full flex items-center gap-1.5 shadow-xs">
-                      <span>📱 Fitur Baru Siswa</span>
-                    </span>
-                    <span className="text-xs text-amber-200 font-bold">
-                      Aplikasi Pembelajaran & Absensi Digital
-                    </span>
+              {/* Dual Banners: Student App & Backoffice Admin */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-6">
+                {/* Banner 1: Student Mobile App */}
+                <div 
+                  onClick={() => handleSelectTab('mobile-app')}
+                  className="p-6 rounded-3xl bg-gradient-to-r from-slate-900 via-slate-800 to-amber-950 text-white shadow-xl flex flex-col justify-between gap-4 cursor-pointer hover:border-amber-400 border border-amber-300/40 transition-all group"
+                >
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <span className="px-3 py-1 bg-amber-500 text-slate-900 text-xs font-black rounded-full flex items-center gap-1 shadow-xs">
+                        <span>📱 Portal Siswa</span>
+                      </span>
+                      <span className="text-xs text-amber-200 font-bold">
+                        Aplikasi & Absensi
+                      </span>
+                    </div>
+                    <h3 className="text-xl font-black tracking-tight">
+                      Student Mobile App ELC
+                    </h3>
+                    <p className="text-xs text-slate-300 font-semibold leading-relaxed">
+                      Modul belajar per program, kartu pelajar digital resmi, riwayat scan presensi QR SQLite, dan sertifikat digital.
+                    </p>
                   </div>
-                  <h3 className="text-xl sm:text-2xl font-black tracking-tight">
-                    Buka Student Mobile App ELC
-                  </h3>
-                  <p className="text-xs sm:text-sm text-slate-300 font-semibold max-w-xl">
-                    Dilengkapi modul belajar sesuai program, jadwal les, kartu pelajar digital resmi, riwayat scan presensi QR, dan sertifikat digital.
-                  </p>
+                  <div className="flex items-center justify-between pt-3 border-t border-white/10 text-xs font-black text-amber-400">
+                    <span>Buka Simulator Mobile</span>
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  </div>
                 </div>
-                <div className="shrink-0 flex items-center gap-2 px-6 py-3.5 bg-gradient-to-r from-amber-500 to-orange-500 rounded-2xl font-black text-xs text-white shadow-md group-hover:scale-105 transition-transform">
-                  <span>Coba Aplikasi Mobile</span>
-                  <ArrowRight className="w-4 h-4" />
+
+                {/* Banner 2: Backoffice Dashboard */}
+                <div 
+                  onClick={() => handleSelectTab('backoffice')}
+                  className="p-6 rounded-3xl bg-gradient-to-r from-indigo-950 via-slate-900 to-slate-900 text-white shadow-xl flex flex-col justify-between gap-4 cursor-pointer hover:border-indigo-400 border border-indigo-400/40 transition-all group"
+                >
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <span className="px-3 py-1 bg-indigo-500 text-white text-xs font-black rounded-full flex items-center gap-1 shadow-xs">
+                        <Database className="w-3 h-3" />
+                        <span>Sistem Manajemen</span>
+                      </span>
+                      <span className="text-xs text-indigo-300 font-bold">
+                        Database SQLite Terintegrasi
+                      </span>
+                    </div>
+                    <h3 className="text-xl font-black tracking-tight">
+                      Web Backoffice Administrator
+                    </h3>
+                    <p className="text-xs text-slate-300 font-semibold leading-relaxed">
+                      Kelola master data siswa (tambah & hapus), pantau rekap presensi QR real-time, dan atur kurikulum modul materi belajar.
+                    </p>
+                  </div>
+                  <div className="flex items-center justify-between pt-3 border-t border-white/10 text-xs font-black text-indigo-400">
+                    <span>Masuk Panel Backoffice</span>
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  </div>
                 </div>
               </div>
             </div>
@@ -280,10 +312,19 @@ export function App() {
             <StudentMobileApp onBackToPortal={() => handleSelectTab('home')} />
           </div>
         )}
+
+        {/* ======================================================== */}
+        {/* PAGE 7: BACKOFFICE DASHBOARD MANAJEMEN SISWA & KURIKULUM */}
+        {/* ======================================================== */}
+        {activeTab === 'backoffice' && (
+          <div className="w-full">
+            <BackofficeDashboard onBackToPortal={() => handleSelectTab('home')} />
+          </div>
+        )}
       </main>
 
-      {/* 4. FOOTER RESMI DI PALING BAWAH HALAMAN (Kecuali Saat Membuka Mobile App) */}
-      {activeTab !== 'mobile-app' && (
+      {/* 4. FOOTER RESMI DI PALING BAWAH HALAMAN (Kecuali Saat Membuka Mobile App atau Backoffice) */}
+      {activeTab !== 'mobile-app' && activeTab !== 'backoffice' && (
         <footer className="border-t border-slate-200 bg-white py-14 px-4 text-xs text-slate-500">
         <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
           <div className="space-y-3">
@@ -341,7 +382,16 @@ export function App() {
 
         <div className="max-w-5xl mx-auto pt-6 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-slate-400">
           <p>© {new Date().getFullYear()} English Lovers Club (ELC). Seluruh Hak Cipta Dilindungi.</p>
-          <p>Terdaftar resmi di Disnaker & Disdik Kabupaten Bandung, Jawa Barat.</p>
+          <div className="flex items-center gap-3">
+            <span>Terdaftar resmi di Disnaker & Disdik Kabupaten Bandung</span>
+            <span>•</span>
+            <button
+              onClick={() => handleSelectTab('backoffice')}
+              className="text-indigo-600 hover:text-indigo-800 font-bold underline cursor-pointer"
+            >
+              Panel Backoffice
+            </button>
+          </div>
         </div>
       </footer>
       )}

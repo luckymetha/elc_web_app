@@ -1,4 +1,4 @@
-import { ArrowRight, PhoneCall } from 'lucide-react';
+import { ArrowRight, PhoneCall, ShieldCheck } from 'lucide-react';
 
 interface NavbarProps {
   activeTab: string;
@@ -91,34 +91,48 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, onSelectTab, onOpenRe
         </nav>
 
         {/* Action Button */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
           <a
             href="https://wa.me/6281234567890?text=Halo%20Admin%20ELC,%20saya%20ingin%20tanya%20program%20pelatihan"
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden lg:flex items-center gap-2 text-xs font-bold text-slate-700 hover:text-slate-900 px-3.5 py-2.5 rounded-xl border border-amber-200 hover:border-amber-300 bg-white transition-colors shadow-2xs"
+            className="hidden xl:flex items-center gap-2 text-xs font-bold text-slate-700 hover:text-slate-900 px-3 py-2 rounded-xl border border-amber-200 hover:border-amber-300 bg-white transition-colors shadow-2xs"
           >
             <PhoneCall className="w-3.5 h-3.5 text-emerald-600" />
             <span>022-5959930</span>
           </a>
 
           <button
+            onClick={() => onSelectTab('backoffice')}
+            title="Buka Backoffice Admin & Manajemen"
+            className={`px-3 py-2 rounded-2xl text-xs font-black flex items-center gap-1.5 transition-all cursor-pointer ${
+              activeTab === 'backoffice'
+                ? 'bg-indigo-900 text-white shadow-md ring-2 ring-indigo-400'
+                : 'bg-indigo-50/80 hover:bg-indigo-100 text-indigo-900 border border-indigo-200 shadow-2xs'
+            }`}
+          >
+            <ShieldCheck className="w-3.5 h-3.5 text-indigo-600" />
+            <span className="hidden sm:inline">Admin</span>
+            <span>Backoffice</span>
+          </button>
+
+          <button
             onClick={() => onSelectTab('mobile-app')}
-            className={`px-3.5 py-2 rounded-2xl text-xs font-black flex items-center gap-1.5 transition-all cursor-pointer ${
+            className={`px-3 py-2 rounded-2xl text-xs font-black flex items-center gap-1.5 transition-all cursor-pointer ${
               activeTab === 'mobile-app'
                 ? 'bg-slate-900 text-white shadow-md'
                 : 'bg-white hover:bg-amber-50 text-slate-800 border border-amber-300 shadow-2xs'
             }`}
           >
             <span>📱</span>
-            <span>Mobile App Siswa</span>
+            <span className="hidden sm:inline">App Siswa</span>
           </button>
 
           <button
             onClick={onOpenRegisterModal}
-            className="px-5 py-2.5 rounded-2xl bg-gradient-to-r from-orange-500 via-amber-500 to-rose-500 hover:from-orange-600 hover:to-rose-600 text-white text-xs font-black shadow-md shadow-orange-500/25 hover:shadow-orange-500/35 transition-all flex items-center gap-2 group cursor-pointer"
+            className="px-4 sm:px-5 py-2.5 rounded-2xl bg-gradient-to-r from-orange-500 via-amber-500 to-rose-500 hover:from-orange-600 hover:to-rose-600 text-white text-xs font-black shadow-md shadow-orange-500/25 hover:shadow-orange-500/35 transition-all flex items-center gap-1.5 sm:gap-2 group cursor-pointer"
           >
-            <span>Daftar Sekarang</span>
+            <span>Daftar</span>
             <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
           </button>
         </div>
@@ -126,3 +140,4 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, onSelectTab, onOpenRe
     </header>
   );
 };
+

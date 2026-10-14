@@ -155,6 +155,120 @@ app.post('/api/student/module/complete', (req, res) => {
   res.json({ success: true, message: 'Modul berhasil diselesaikan!' });
 });
 
+// ==========================================
+// 5. BACKOFFICE: ADMIN STATS & REKAP
+// ==========================================
+app.get('/api/admin/overview', (_req, res) => {
+  const totalStudents = db.prepare("SELECT count(*) as count FROM users WHERE role = 'student'").get() as any;
+  const englishStudents = db.prepare("SELECT count(*) as count FROM users WHERE role = 'student' AND program_category = 'english'").get() as any;
+  const computerStudents = db.prepare("SELECT count(*) as count FROM users WHERE role = 'student' AND program_category = 'computer'").get() as any;
+  const lpkStudents = db.prepare("SELECT count(*) as count FROM users WHERE role = 'student' AND program_category = 'lpk'").get() as any;
+  const totalAttendances = db.prepare("SELECT count(*) as count FROM attendances").get() as any;
+  const totalCertificates = db.prepare("SELECT count(*) as count FROM certificates").get() as any;
+
+  res.json({
+    totalStudents: totalStudents.count,
+    englishStudents: englishStudents.count,
+    computerStudents: computerStudents.count,
+    lpkStudents: lpkStudents.count,
+    totalAttendances: totalAttendances.count,
+    totalCertificates: totalCertificates.count
+  });
+});
+
+// ==========================================
+// 6. BACKOFFICE: CRUD DATA SISWA
+// ==========================================
+app.get('/api/admin/students', (_req, res) => {
+  const students = db.prepare(`
+    SELECT u.*, 
+      (SELECT count(*) FROM attendances a WHERE a.user_id = u.id) as attendance_count,
+      (SELECT count(*) FROM student_module_progress p WHERE p.user_id = u.id AND p.status = 'completed') as completed_modules,
+      (SELECT cert_number FROM certificates c WHERE c.user_id = u.id) as cert_number
+    FROM users u
+    WHERE u.role = 'student'
+    ORDER BY u.created_at DESC
+  `).all();
+  res.json(students);
+});
+
+app.post('/api/admin/students', (req, res) => {
+  const { name, email, student_id_number, program_category, program_name, class_type, branch, password } = req.body;
+
+  if (!name || !email || !student_id_number || !program_category) {
+    return res.status(400).json({ error: 'Nama, Email, NIM, dan Kategori Program wajib diisi!' });
+  }
+
+  const userId = 'user-' + Date.now();
+  const passwordHash = password || 'elc12345';
+  const avatar = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80';
+
+  try {
+    db.prepare(`
+      INSERT INTO users (id, student_id_number, name, email, password_hash, role, avatar, program_category, program_name, class_type, branch)
+      VALUES (?, ?, ?, ?, ?, 'student', ?, ?, ?, ?, ?)
+    `).run(
+      userId,
+      student_id_number,
+      name,
+      email,
+      passwordHash,
+      avatar,
+      program_category,
+      program_name || 'Program Kursus ELC',
+      class_type || 'Reguler',
+      branch || 'Kampus Pusat Ciparay'
+    );
+
+    res.json({ success: true, message: 'Siswa baru berhasil didaftarkan!', studentId: userId });
+  } catch (err: any) {
+    res.status(400).json({ error: 'NIM atau Email sudah terdaftar: ' + err.message });
+  }
+});
+
+app.delete('/api/admin/students/:userId', (req, res) => {
+  const { userId } = req.params;
+  db.prepare('DELETE FROM student_module_progress WHERE user_id = ?').run(userId);
+  db.prepare('DELETE FROM attendances WHERE user_id = ?').run(userId);
+  db.prepare('DELETE FROM certificates WHERE user_id = ?').run(userId);
+  db.prepare('DELETE FROM users WHERE id = ?').run(userId);
+  res.json({ success: true, message: 'Data siswa berhasil dihapus' });
+});
+
+// ==========================================
+// 7. BACKOFFICE: LOG PRESENSI SEMUA SISWA
+// ==========================================
+app.get('/api/admin/attendances', (_req, res) => {
+  const attendances = db.prepare(`
+    SELECT a.*, u.name as student_name, u.student_id_number, u.program_category, u.branch
+    FROM attendances a
+    JOIN users u ON a.user_id = u.id
+    ORDER BY a.scan_time DESC
+    LIMIT 100
+  `).all();
+  res.json(attendances);
+});
+
+// ==========================================
+// 8. BACKOFFICE: KELOLA MODUL PEMBELAJARAN
+// ==========================================
+app.get('/api/admin/modules', (_req, res) => {
+  const modules = db.prepare('SELECT * FROM modules ORDER BY program_category, order_index').all();
+  res.json(modules);
+});
+
+app.post('/api/admin/modules', (req, res) => {
+  const { program_category, title, type, duration, description } = req.body;
+  const modId = 'mod-' + Date.now();
+
+  db.prepare(`
+    INSERT INTO modules (id, program_category, title, type, duration, description, order_index)
+    VALUES (?, ?, ?, ?, ?, ?, 99)
+  `).run(modId, program_category, title, type || 'pdf', duration || '30 Menit', description || '');
+
+  res.json({ success: true, message: 'Modul baru berhasil ditambahkan!' });
+});
+
 app.listen(PORT, () => {
   console.log(`[ELC Backend API] Server berjalan di http://localhost:${PORT}`);
 });
