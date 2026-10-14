@@ -28,13 +28,24 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, onSelectTab, onOpenRe
           </div>
         </div>
 
-        {/* Dynamic Category Switcher with Rounded Pill Theme */}
-        <nav className="hidden md:flex items-center p-1.5 bg-amber-100/60 rounded-2xl border border-amber-200/80 shadow-inner">
+        {/* Clean Multi-Page Navigation Menu */}
+        <nav className="hidden md:flex items-center gap-1 p-1 bg-amber-100/60 rounded-2xl border border-amber-200/80 shadow-xs">
+          <button
+            onClick={() => onSelectTab('home')}
+            className={`px-3.5 py-2 text-xs font-black rounded-xl transition-all duration-200 flex items-center gap-1.5 cursor-pointer ${
+              activeTab === 'home'
+                ? 'bg-white text-slate-900 shadow-sm ring-1 ring-amber-300'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-white/50'
+            }`}
+          >
+            <span>Beranda</span>
+          </button>
+
           <button
             onClick={() => onSelectTab('english')}
-            className={`px-4 py-2 text-xs font-extrabold rounded-xl transition-all duration-300 flex items-center gap-2 cursor-pointer ${
+            className={`px-3.5 py-2 text-xs font-black rounded-xl transition-all duration-200 flex items-center gap-1.5 cursor-pointer ${
               activeTab === 'english'
-                ? 'bg-white text-orange-600 shadow-sm'
+                ? 'bg-white text-orange-600 shadow-sm ring-1 ring-amber-300'
                 : 'text-slate-600 hover:text-slate-900 hover:bg-white/50'
             }`}
           >
@@ -44,9 +55,9 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, onSelectTab, onOpenRe
 
           <button
             onClick={() => onSelectTab('computer')}
-            className={`px-4 py-2 text-xs font-extrabold rounded-xl transition-all duration-300 flex items-center gap-2 cursor-pointer ${
+            className={`px-3.5 py-2 text-xs font-black rounded-xl transition-all duration-200 flex items-center gap-1.5 cursor-pointer ${
               activeTab === 'computer'
-                ? 'bg-white text-emerald-700 shadow-sm'
+                ? 'bg-white text-cyan-700 shadow-sm ring-1 ring-amber-300'
                 : 'text-slate-600 hover:text-slate-900 hover:bg-white/50'
             }`}
           >
@@ -56,14 +67,26 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, onSelectTab, onOpenRe
 
           <button
             onClick={() => onSelectTab('lpk')}
-            className={`px-4 py-2 text-xs font-extrabold rounded-xl transition-all duration-300 flex items-center gap-2 cursor-pointer ${
+            className={`px-3.5 py-2 text-xs font-black rounded-xl transition-all duration-200 flex items-center gap-1.5 cursor-pointer ${
               activeTab === 'lpk'
-                ? 'bg-white text-amber-700 shadow-sm'
+                ? 'bg-white text-emerald-700 shadow-sm ring-1 ring-amber-300'
                 : 'text-slate-600 hover:text-slate-900 hover:bg-white/50'
             }`}
           >
             <span>🏢</span>
             <span>LPK BNSP</span>
+          </button>
+
+          <button
+            onClick={() => onSelectTab('verification')}
+            className={`px-3 py-2 text-xs font-extrabold rounded-xl transition-all duration-200 flex items-center gap-1 cursor-pointer ${
+              activeTab === 'verification'
+                ? 'bg-white text-amber-800 shadow-sm ring-1 ring-amber-300'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-white/50'
+            }`}
+          >
+            <span>🔍</span>
+            <span>Cek Sertifikat</span>
           </button>
         </nav>
 
