@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { motion, useScroll } from 'framer-motion';
+import { motion, useScroll, useMotionValueEvent } from 'framer-motion';
 import { Quote, Sparkles, ChevronDown, CheckCircle2, ChevronLeft, ChevronRight, MousePointerClick } from 'lucide-react';
 import { ALL_BLOG_TESTIMONIALS } from '../data/programs';
 
@@ -13,7 +13,7 @@ export const AOSPinnedStoriesStream: React.FC = () => {
     offset: ['start start', 'end end']
   });
 
-  scrollYProgress.on('change', (latest) => {
+  useMotionValueEvent(scrollYProgress, 'change', (latest) => {
     const total = ALL_BLOG_TESTIMONIALS.length;
     const calculatedIdx = Math.min(
       total - 1,

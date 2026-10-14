@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { motion, useScroll, AnimatePresence } from 'framer-motion';
+import { motion, useScroll, useMotionValueEvent, AnimatePresence } from 'framer-motion';
 import { 
   Sparkles, 
   BookOpen, 
@@ -140,13 +140,13 @@ export const AOSPinnedMethodologyStream: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [activeStoryIdx, setActiveStoryIdx] = useState(0);
 
-  // Dedicated scroll progress mapping 0 -> 1 over the 320vh height
+  // Dedicated scroll progress mapping 0 -> 1 over the 340vh height
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start start', 'end end']
   });
 
-  scrollYProgress.on('change', (latest) => {
+  useMotionValueEvent(scrollYProgress, 'change', (latest) => {
     const total = METHODOLOGY_STORIES.length;
     const calculatedIdx = Math.min(
       total - 1,
