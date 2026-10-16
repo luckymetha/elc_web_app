@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Navbar } from './components/Navbar';
 import { PortraitHero } from './components/PortraitHero';
 import { AOSPinnedMethodologyStream } from './components/AOSPinnedMethodologyStream';
@@ -14,17 +15,58 @@ import { LPKPage } from './pages/LPKPage';
 import { StudentMobileApp } from './components/StudentMobileApp';
 import { BackofficeDashboard } from './components/BackofficeDashboard';
 import { INSTITUTION_INFO } from './data/programs';
-import { ArrowRight, MapPin, ShieldCheck, Database } from 'lucide-react';
+import { ArrowRight, MapPin, ShieldCheck, Database, GraduationCap, Lock } from 'lucide-react';
 
 export function App() {
-  const [activeTab, setActiveTab] = useState<string>('home');
+  const location = useLocation();
+  const navigate = useNavigate();
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
   const [selectedProgramTitle, setSelectedProgramTitle] = useState('English Lovers Club (ELC)');
 
-  // Scroll to top when page changes
-  const handleSelectTab = (tabId: string) => {
-    setActiveTab(tabId);
+  const getActiveTabFromPath = (path: string) => {
+    if (path.startsWith('/siswa') || path === '/login-siswa') return 'mobile-app';
+    if (path.startsWith('/admin') || path.startsWith('/backoffice') || path === '/login-admin') return 'backoffice';
+    if (path.startsWith('/program/english') || path === '/english') return 'english';
+    if (path.startsWith('/program/computer') || path === '/computer') return 'computer';
+    if (path.startsWith('/program/lpk') || path === '/lpk') return 'lpk';
+    if (path.startsWith('/verifikasi') || path === '/cek-sertifikat') return 'verification';
+    return 'home';
+  };
+
+  const activeTab = getActiveTabFromPath(location.pathname);
+
+  // Scroll to top when path changes
+  useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [location.pathname]);
+
+  // Navigate to proper URL path when tab changes
+  const handleSelectTab = (tabId: string) => {
+    switch (tabId) {
+      case 'home':
+        navigate('/');
+        break;
+      case 'english':
+        navigate('/program/english');
+        break;
+      case 'computer':
+        navigate('/program/computer');
+        break;
+      case 'lpk':
+        navigate('/program/lpk');
+        break;
+      case 'verification':
+        navigate('/verifikasi');
+        break;
+      case 'mobile-app':
+        navigate('/siswa');
+        break;
+      case 'backoffice':
+        navigate('/admin');
+        break;
+      default:
+        navigate('/');
+    }
   };
 
   const handleOpenRegister = (title?: string) => {
@@ -382,14 +424,21 @@ export function App() {
 
         <div className="max-w-5xl mx-auto pt-6 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-slate-400">
           <p>© {new Date().getFullYear()} English Lovers Club (ELC). Seluruh Hak Cipta Dilindungi.</p>
-          <div className="flex items-center gap-3">
-            <span>Terdaftar resmi di Disnaker & Disdik Kabupaten Bandung</span>
+          <div className="flex flex-wrap items-center gap-3">
+            <button
+              onClick={() => handleSelectTab('mobile-app')}
+              className="text-slate-600 hover:text-amber-700 font-bold underline cursor-pointer flex items-center gap-1"
+            >
+              <GraduationCap className="w-3.5 h-3.5 text-amber-600" />
+              <span>Login Portal Siswa (/siswa)</span>
+            </button>
             <span>•</span>
             <button
               onClick={() => handleSelectTab('backoffice')}
-              className="text-indigo-600 hover:text-indigo-800 font-bold underline cursor-pointer"
+              className="text-indigo-600 hover:text-indigo-800 font-bold underline cursor-pointer flex items-center gap-1"
             >
-              Panel Backoffice
+              <Lock className="w-3.5 h-3.5 text-indigo-600" />
+              <span>Login Admin Backoffice (/admin)</span>
             </button>
           </div>
         </div>

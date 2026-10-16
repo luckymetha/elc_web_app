@@ -10,29 +10,168 @@ import {
   ArrowLeft, 
   ShieldCheck, 
   Search, 
-  BarChart3
+  BarChart3,
+  LogOut,
+  Lock,
+  Mail,
+  ArrowRight
 } from 'lucide-react';
 
 interface BackofficeDashboardProps {
   onBackToPortal: () => void;
 }
 
+const FALLBACK_OVERVIEW = {
+  totalStudents: 3,
+  englishStudents: 1,
+  computerStudents: 1,
+  lpkStudents: 1,
+  totalAttendances: 7,
+  totalCertificates: 3
+};
+
+const FALLBACK_STUDENTS = [
+  {
+    id: "user-1",
+    student_id_number: "ELC-ENG-041",
+    name: "Rizky Ramadhani",
+    email: "rizky@elc.id",
+    avatar: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=300&q=80",
+    program_category: "english",
+    program_name: "Active Speaking & Teens Conversation",
+    class_type: "Reguler Sore",
+    branch: "Kampus Pusat Ciparay",
+    attendance_count: 5,
+    completed_modules: 2,
+    cert_number: "ELC/ENG/2026/0892"
+  },
+  {
+    id: "user-2",
+    student_id_number: "ELC-COM-019",
+    name: "Siti Nurhaliza",
+    email: "siti@elc.id",
+    avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=300&q=80",
+    program_category: "computer",
+    program_name: "Aplikasi Perkantoran & Excel Mahir",
+    class_type: "Privat Intensif",
+    branch: "Kampus Pusat Ciparay (Lab Komputer)",
+    attendance_count: 1,
+    completed_modules: 2,
+    cert_number: "ELC/COMP/2026/0311"
+  },
+  {
+    id: "user-3",
+    student_id_number: "ELC-LPK-007",
+    name: "Fajar Nugraha",
+    email: "fajar@elc.id",
+    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80",
+    program_category: "lpk",
+    program_name: "LPK Vokasi Siap Kerja & Sertifikasi BNSP",
+    class_type: "Kelas Vokasi Industri",
+    branch: "Kampus Cabang Pacet (Jalancagak)",
+    attendance_count: 1,
+    completed_modules: 2,
+    cert_number: "ELC/BNSP/2026/0055"
+  }
+];
+
+const FALLBACK_ATTENDANCES = [
+  {
+    id: "att-1",
+    user_id: "user-1",
+    student_name: "Rizky Ramadhani",
+    student_id_number: "ELC-ENG-041",
+    program_category: "english",
+    branch: "Kampus Pusat Ciparay",
+    session_name: "Active Speaking: Daily Expressions & Fluency",
+    room_name: "Ruang Audio-Visual Lt. 2",
+    scan_time: "2026-10-14 16:30:00",
+    status: "Hadir"
+  },
+  {
+    id: "att-2",
+    user_id: "user-2",
+    student_name: "Siti Nurhaliza",
+    student_id_number: "ELC-COM-019",
+    program_category: "computer",
+    branch: "Kampus Pusat Ciparay",
+    session_name: "Praktik Rumus Excel VLOOKUP & Pivot Table",
+    room_name: "Lab Komputer AC (1 Siswa 1 PC)",
+    scan_time: "2026-10-14 14:15:00",
+    status: "Hadir"
+  },
+  {
+    id: "att-3",
+    user_id: "user-3",
+    student_name: "Fajar Nugraha",
+    student_id_number: "ELC-LPK-007",
+    program_category: "lpk",
+    branch: "Kampus Cabang Pacet (Jalancagak)",
+    session_name: "Simulasi Uji Kompetensi BNSP",
+    room_name: "Aula Workshop Vokasi LPK",
+    scan_time: "2026-10-14 10:00:00",
+    status: "Hadir"
+  }
+];
+
+const FALLBACK_MODULES = [
+  {
+    id: "mod-eng-1",
+    program_category: "english",
+    title: "Unit 1: Self Introduction & Overcoming Mental Block",
+    type: "video",
+    duration: "45 Menit",
+    description: "Fondasi berbicara tanpa rasa takut salah grammar melalui metode Active Speaking ELC."
+  },
+  {
+    id: "mod-eng-2",
+    program_category: "english",
+    title: "Unit 2: Idiomatic Expressions in Casual Conversation",
+    type: "pdf",
+    duration: "30 Menit",
+    description: "Kumpulan ungkapan natural yang umum digunakan oleh native speaker."
+  },
+  {
+    id: "mod-com-1",
+    program_category: "computer",
+    title: "Modul 1: Excel Formula Terapan Kerja (IF, VLOOKUP, INDEX)",
+    type: "pdf",
+    duration: "60 Menit",
+    description: "Studi kasus pengolahan data laporan administrasi dan keuangan kantor."
+  },
+  {
+    id: "mod-lpk-1",
+    program_category: "lpk",
+    title: "SKKNI Unit 1: Tata Kelola Dokumen & Korespondensi Bisnis",
+    type: "pdf",
+    duration: "90 Menit",
+    description: "Standar kompetensi kerja nasional untuk staf administrasi perkantoran modern."
+  }
+];
+
 export const BackofficeDashboard: React.FC<BackofficeDashboardProps> = ({ onBackToPortal }) => {
+  // Autentikasi Admin State
+  const [adminUser, setAdminUser] = useState<any>(() => {
+    try {
+      const saved = localStorage.getItem('elc_admin_session');
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
+
+  const [adminEmail, setAdminEmail] = useState('');
+  const [adminPassword, setAdminPassword] = useState('');
+  const [loginError, setLoginError] = useState('');
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
+
   const [activeTab, setActiveTab] = useState<'overview' | 'students' | 'attendances' | 'modules'>('overview');
   
   // Data State dari SQLite
-  const [overview, setOverview] = useState<any>({
-    totalStudents: 0,
-    englishStudents: 0,
-    computerStudents: 0,
-    lpkStudents: 0,
-    totalAttendances: 0,
-    totalCertificates: 0
-  });
-
-  const [students, setStudents] = useState<any[]>([]);
-  const [attendances, setAttendances] = useState<any[]>([]);
-  const [modules, setModules] = useState<any[]>([]);
+  const [overview, setOverview] = useState<any>(FALLBACK_OVERVIEW);
+  const [students, setStudents] = useState<any[]>(FALLBACK_STUDENTS);
+  const [attendances, setAttendances] = useState<any[]>(FALLBACK_ATTENDANCES);
+  const [modules, setModules] = useState<any[]>(FALLBACK_MODULES);
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -60,18 +199,75 @@ export const BackofficeDashboard: React.FC<BackofficeDashboardProps> = ({ onBack
   });
 
   useEffect(() => {
-    fetchOverview();
-    fetchStudents();
-    fetchAttendances();
-    fetchModules();
-  }, []);
+    if (adminUser) {
+      fetchOverview();
+      fetchStudents();
+      fetchAttendances();
+      fetchModules();
+    }
+  }, [adminUser]);
+
+  const handleAdminLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoginError('');
+    setIsLoggingIn(true);
+
+    try {
+      const res = await fetch('http://localhost:3301/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ identifier: adminEmail, password: adminPassword })
+      });
+
+      const data = await res.json();
+      if (res.ok && data.user) {
+        if (data.user.role !== 'admin') {
+          setLoginError('Akun ini adalah akun siswa, silakan login di Portal Siswa (/siswa).');
+          return;
+        }
+        setAdminUser(data.user);
+        localStorage.setItem('elc_admin_session', JSON.stringify(data.user));
+      } else {
+        setLoginError(data.error || 'Login gagal');
+      }
+    } catch {
+      // Offline / Vercel fallback
+      if (
+        (adminEmail.toLowerCase() === 'admin@elc.id' || 
+         adminEmail.toUpperCase() === 'ELC-ADM-001' || 
+         adminEmail.toLowerCase() === 'admin') && 
+        adminPassword === 'admin123'
+      ) {
+        const demoAdmin = {
+          id: 'admin-1',
+          student_id_number: 'ELC-ADM-001',
+          name: 'Mr. Entis Sutisna',
+          email: 'admin@elc.id',
+          role: 'admin',
+          avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=300&q=80',
+          branch: 'Kampus Pusat Ciparay'
+        };
+        setAdminUser(demoAdmin);
+        localStorage.setItem('elc_admin_session', JSON.stringify(demoAdmin));
+      } else {
+        setLoginError('Email atau password salah! Coba akun demo: admin@elc.id / admin123');
+      }
+    } finally {
+      setIsLoggingIn(false);
+    }
+  };
+
+  const handleAdminLogout = () => {
+    setAdminUser(null);
+    localStorage.removeItem('elc_admin_session');
+  };
 
   const fetchOverview = async () => {
     try {
       const res = await fetch('http://localhost:3301/api/admin/overview');
       if (res.ok) setOverview(await res.json());
-    } catch (e) {
-      console.error(e);
+    } catch {
+      setOverview(FALLBACK_OVERVIEW);
     }
   };
 
@@ -80,6 +276,8 @@ export const BackofficeDashboard: React.FC<BackofficeDashboardProps> = ({ onBack
       setIsLoading(true);
       const res = await fetch('http://localhost:3301/api/admin/students');
       if (res.ok) setStudents(await res.json());
+    } catch {
+      setStudents(FALLBACK_STUDENTS);
     } finally {
       setIsLoading(false);
     }
@@ -89,8 +287,8 @@ export const BackofficeDashboard: React.FC<BackofficeDashboardProps> = ({ onBack
     try {
       const res = await fetch('http://localhost:3301/api/admin/attendances');
       if (res.ok) setAttendances(await res.json());
-    } catch (e) {
-      console.error(e);
+    } catch {
+      setAttendances(FALLBACK_ATTENDANCES);
     }
   };
 
@@ -98,8 +296,8 @@ export const BackofficeDashboard: React.FC<BackofficeDashboardProps> = ({ onBack
     try {
       const res = await fetch('http://localhost:3301/api/admin/modules');
       if (res.ok) setModules(await res.json());
-    } catch (e) {
-      console.error(e);
+    } catch {
+      setModules(FALLBACK_MODULES);
     }
   };
 
@@ -164,6 +362,107 @@ export const BackofficeDashboard: React.FC<BackofficeDashboardProps> = ({ onBack
     s.student_id_number.toLowerCase().includes(searchQuery.toLowerCase()) ||
     s.email.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  // Jika belum login admin, tampilkan form login khusus Administrator
+  if (!adminUser) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 flex flex-col justify-center items-center px-4 py-12 font-nunito relative selection:bg-amber-500 selection:text-white">
+        {/* Back button */}
+        <button
+          onClick={onBackToPortal}
+          className="absolute top-6 left-6 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition-all flex items-center gap-2 cursor-pointer backdrop-blur-md"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          <span>Kembali ke Halaman Utama</span>
+        </button>
+
+        <div className="w-full max-w-md bg-white rounded-3xl shadow-2xl p-8 border border-slate-100 space-y-6">
+          <div className="text-center space-y-2">
+            <div className="w-16 h-16 rounded-3xl bg-gradient-to-tr from-amber-500 via-orange-500 to-rose-500 flex items-center justify-center text-white font-black text-2xl shadow-lg shadow-orange-500/25 mx-auto ring-4 ring-orange-100">
+              ELC
+            </div>
+            <div className="pt-2">
+              <span className="px-3 py-1 rounded-full text-[11px] font-black uppercase tracking-wider bg-indigo-50 text-indigo-700 border border-indigo-200 inline-block">
+                Portal Manajemen Staf
+              </span>
+            </div>
+            <h2 className="text-2xl font-black text-slate-900 tracking-tight">
+              Login Backoffice ELC
+            </h2>
+            <p className="text-xs text-slate-500 font-semibold leading-relaxed">
+              Khusus pengelola, pimpinan lembaga (Mr. Entis Sutisna), dan instruktur LKP/LPK English Lovers Club.
+            </p>
+          </div>
+
+          {loginError && (
+            <div className="p-3.5 rounded-2xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-bold flex items-center gap-2">
+              <ShieldCheck className="w-4 h-4 shrink-0 text-rose-500" />
+              <span>{loginError}</span>
+            </div>
+          )}
+
+          <form onSubmit={handleAdminLogin} className="space-y-4">
+            <div className="space-y-1.5">
+              <label className="text-xs font-black text-slate-700 flex items-center gap-1.5">
+                <Mail className="w-3.5 h-3.5 text-indigo-600" />
+                <span>Email atau ID Admin</span>
+              </label>
+              <input
+                type="text"
+                required
+                value={adminEmail}
+                onChange={(e) => setAdminEmail(e.target.value)}
+                placeholder="misal: admin@elc.id atau ELC-ADM-001"
+                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-bold focus:outline-hidden focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all"
+              />
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="text-xs font-black text-slate-700 flex items-center gap-1.5">
+                <Lock className="w-3.5 h-3.5 text-indigo-600" />
+                <span>Password</span>
+              </label>
+              <input
+                type="password"
+                required
+                value={adminPassword}
+                onChange={(e) => setAdminPassword(e.target.value)}
+                placeholder="••••••••"
+                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-bold focus:outline-hidden focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all"
+              />
+            </div>
+
+            <button
+              type="submit"
+              disabled={isLoggingIn}
+              className="w-full py-3.5 px-4 bg-gradient-to-r from-indigo-900 to-slate-900 hover:from-indigo-800 hover:to-slate-800 text-white rounded-2xl font-black text-xs shadow-md shadow-indigo-950/20 hover:shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+            >
+              <span>{isLoggingIn ? 'Memverifikasi...' : 'Masuk ke Backoffice'}</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </form>
+
+          {/* Quick Demo Fill Button */}
+          <div className="pt-4 border-t border-slate-100 space-y-2">
+            <p className="text-[11px] text-slate-400 font-bold text-center">
+              Akses Cepat Pengujian Demo Admin:
+            </p>
+            <button
+              type="button"
+              onClick={() => {
+                setAdminEmail('admin@elc.id');
+                setAdminPassword('admin123');
+              }}
+              className="w-full py-2.5 px-3 bg-amber-50 hover:bg-amber-100 border border-amber-200 rounded-xl text-amber-900 text-xs font-bold transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+            >
+              <span>🔑</span>
+              <span>Gunakan Akun: admin@elc.id / admin123</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-slate-100 font-nunito flex flex-col">
@@ -240,6 +539,30 @@ export const BackofficeDashboard: React.FC<BackofficeDashboardProps> = ({ onBack
           >
             <BookOpen className="w-4 h-4" />
             <span>Materi Pembelajaran</span>
+          </button>
+        </div>
+
+        {/* Admin Profile & Logout */}
+        <div className="flex items-center gap-3">
+          <div className="hidden sm:flex items-center gap-2.5 bg-slate-800/80 px-3 py-1.5 rounded-2xl border border-slate-700">
+            <img 
+              src={adminUser?.avatar || "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=300&q=80"} 
+              alt={adminUser?.name || "Admin"} 
+              className="w-7 h-7 rounded-xl object-cover ring-2 ring-amber-400"
+            />
+            <div className="text-left">
+              <p className="text-xs font-black text-white leading-tight">{adminUser?.name || "Mr. Entis Sutisna"}</p>
+              <p className="text-[10px] text-amber-400 font-bold">Pimpinan Lembaga / Admin</p>
+            </div>
+          </div>
+
+          <button
+            onClick={handleAdminLogout}
+            className="px-3 py-1.5 bg-rose-500/20 hover:bg-rose-500 text-rose-300 hover:text-white border border-rose-500/30 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer"
+            title="Keluar dari sesi admin"
+          >
+            <LogOut className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">Logout</span>
           </button>
         </div>
       </header>

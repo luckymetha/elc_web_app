@@ -104,7 +104,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, onSelectTab, onOpenRe
 
           <button
             onClick={() => onSelectTab('backoffice')}
-            title="Buka Backoffice Admin & Manajemen"
+            title="Buka Login Backoffice Admin (/admin)"
             className={`px-3 py-2 rounded-2xl text-xs font-black flex items-center gap-1.5 transition-all cursor-pointer ${
               activeTab === 'backoffice'
                 ? 'bg-indigo-900 text-white shadow-md ring-2 ring-indigo-400'
@@ -112,12 +112,13 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, onSelectTab, onOpenRe
             }`}
           >
             <ShieldCheck className="w-3.5 h-3.5 text-indigo-600" />
-            <span className="hidden sm:inline">Admin</span>
-            <span>Backoffice</span>
+            <span className="hidden sm:inline">Login</span>
+            <span>Admin</span>
           </button>
 
           <button
             onClick={() => onSelectTab('mobile-app')}
+            title="Buka Login Portal Siswa & Mobile App (/siswa)"
             className={`px-3 py-2 rounded-2xl text-xs font-black flex items-center gap-1.5 transition-all cursor-pointer ${
               activeTab === 'mobile-app'
                 ? 'bg-slate-900 text-white shadow-md'
@@ -125,7 +126,8 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, onSelectTab, onOpenRe
             }`}
           >
             <span>📱</span>
-            <span className="hidden sm:inline">App Siswa</span>
+            <span className="hidden sm:inline">Login</span>
+            <span>Siswa</span>
           </button>
 
           <button
