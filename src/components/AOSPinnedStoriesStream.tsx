@@ -1,13 +1,12 @@
 import { useRef, useState } from 'react';
 import { motion, useScroll, useMotionValueEvent } from 'framer-motion';
-import { Quote, Sparkles, ChevronDown, CheckCircle2, ChevronLeft, ChevronRight, MousePointerClick } from 'lucide-react';
+import { Quote, CheckCircle2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { ALL_BLOG_TESTIMONIALS } from '../data/programs';
 
 export const AOSPinnedStoriesStream: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [activeStoryIdx, setActiveStoryIdx] = useState(0);
 
-  // Scroll tracking inside a dedicated container for smooth pinned story morphing
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start start', 'end end']
@@ -15,16 +14,12 @@ export const AOSPinnedStoriesStream: React.FC = () => {
 
   useMotionValueEvent(scrollYProgress, 'change', (latest) => {
     const total = ALL_BLOG_TESTIMONIALS.length;
-    const calculatedIdx = Math.min(
-      total - 1,
-      Math.floor(latest * total)
-    );
+    const calculatedIdx = Math.min(total - 1, Math.floor(latest * total));
     if (calculatedIdx !== activeStoryIdx) {
       setActiveStoryIdx(calculatedIdx);
     }
   });
 
-  // Function to navigate by click and optionally sync scroll container position
   const selectStory = (index: number, syncScroll = true) => {
     const targetIdx = Math.max(0, Math.min(ALL_BLOG_TESTIMONIALS.length - 1, index));
     setActiveStoryIdx(targetIdx);
@@ -34,7 +29,7 @@ export const AOSPinnedStoriesStream: React.FC = () => {
       const containerHeight = containerRef.current.offsetHeight;
       const stepProgress = (targetIdx + 0.3) / ALL_BLOG_TESTIMONIALS.length;
       const targetScroll = containerTop + (containerHeight * stepProgress) - (window.innerHeight * 0.2);
-      
+
       window.scrollTo({
         top: Math.max(0, targetScroll),
         behavior: 'smooth'
@@ -55,149 +50,112 @@ export const AOSPinnedStoriesStream: React.FC = () => {
   const activeTestimonial = ALL_BLOG_TESTIMONIALS[activeStoryIdx] || ALL_BLOG_TESTIMONIALS[0];
 
   return (
-    <div ref={containerRef} className="relative h-[280vh] w-full">
-      {/* Pinned Viewport Container (Tetap Diam di Layar Saat Di-scroll) */}
-      <div className="sticky top-24 h-[calc(100vh-6rem)] w-full flex flex-col justify-center items-center px-3 sm:px-6">
-        <div className="w-full max-w-4xl bg-white rounded-3xl border border-amber-200/80 p-6 sm:p-10 shadow-xl shadow-amber-900/5 relative overflow-hidden flex flex-col justify-between">
-          {/* Subtle Ambient Glow */}
-          <div className="absolute top-0 right-0 w-80 h-80 bg-amber-50 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute bottom-0 left-0 w-60 h-60 bg-orange-50 rounded-full blur-3xl pointer-events-none" />
-
-          {/* 1. Header Tag & Direct Click Indicators */}
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-5 border-b border-amber-100 gap-3 mb-4">
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="px-3 py-1 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs font-black rounded-full shadow-xs flex items-center gap-1.5 font-nunito">
-                <Sparkles className="w-3.5 h-3.5" />
-                <span>AOS Story #{activeStoryIdx + 1} dari {ALL_BLOG_TESTIMONIALS.length}</span>
+    <div ref={containerRef} className="relative h-[240vh] w-full">
+      <div className="sticky top-24 h-[calc(100vh-7rem)] w-full flex flex-col justify-center items-center px-2 sm:px-4">
+        <div className="w-full max-w-4xl bg-white rounded-2xl border border-slate-200 p-6 sm:p-10 shadow-sm relative flex flex-col justify-between">
+          {/* Header: Counter & Alumni Name Tabs */}
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-5 border-b border-slate-200 gap-3 mb-5">
+            <div className="flex items-center gap-3">
+              <span className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#C81E1E]">
+                Testimoni Alumni
               </span>
-              <span className="px-2.5 py-0.5 bg-amber-50 text-amber-800 border border-amber-200 text-[11px] font-bold rounded-lg flex items-center gap-1 font-nunito">
-                <MousePointerClick className="w-3 h-3 text-orange-600" />
-                <span>Bisa Scroll (AOS) & Bisa Klik</span>
+              <span className="text-xs font-semibold text-slate-400">
+                0{activeStoryIdx + 1} / 0{ALL_BLOG_TESTIMONIALS.length}
               </span>
             </div>
 
-            {/* Quick Step Clickable Indicators */}
-            <div className="flex items-center gap-1.5 self-end sm:self-auto bg-slate-50 p-1.5 rounded-full border border-slate-200/80">
-              {ALL_BLOG_TESTIMONIALS.map((t, i) => (
-                <button
-                  key={i}
-                  type="button"
-                  onClick={() => selectStory(i)}
-                  title={`Lihat Testimoni #${i + 1}: ${t.name}`}
-                  className={`h-3 rounded-full transition-all duration-300 cursor-pointer ${
-                    i === activeStoryIdx
-                      ? 'w-7 bg-gradient-to-r from-amber-500 to-orange-500 shadow-xs'
-                      : 'w-3 bg-slate-300 hover:bg-amber-300'
-                  }`}
-                  aria-label={`Pindah ke testimoni ${i + 1}`}
-                />
-              ))}
+            <div className="flex items-center gap-1.5 overflow-x-auto max-w-full pb-1 sm:pb-0">
+              {ALL_BLOG_TESTIMONIALS.map((item, idx) => {
+                const isSelected = idx === activeStoryIdx;
+                return (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => selectStory(idx)}
+                    className={`shrink-0 px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors cursor-pointer ${
+                      isSelected
+                        ? 'bg-[#0B1F3A] text-white'
+                        : 'bg-slate-100 hover:bg-slate-200 text-slate-600'
+                    }`}
+                  >
+                    {item.name.split(',')[0]}
+                  </button>
+                );
+              })}
             </div>
           </div>
 
-          {/* 2. Mini Name Selector Tabs (Quick Click by Alumni Name) */}
-          <div className="flex items-center gap-1.5 overflow-x-auto pb-2 scrollbar-none mb-3 -mx-2 px-2">
-            {ALL_BLOG_TESTIMONIALS.map((item, idx) => {
-              const isSelected = idx === activeStoryIdx;
-              return (
-                <button
-                  key={idx}
-                  type="button"
-                  onClick={() => selectStory(idx)}
-                  className={`shrink-0 px-3 py-1 text-xs font-bold rounded-xl transition-all cursor-pointer font-nunito flex items-center gap-1.5 ${
-                    isSelected
-                      ? 'bg-amber-600 text-white shadow-sm shadow-amber-600/30 ring-2 ring-amber-300'
-                      : 'bg-slate-100 hover:bg-amber-100 text-slate-600 hover:text-amber-900 border border-slate-200/60'
-                  }`}
-                >
-                  <span className={`w-1.5 h-1.5 rounded-full ${isSelected ? 'bg-white' : 'bg-slate-400'}`} />
-                  <span className="truncate max-w-[130px]">{item.name.split(',')[0]}</span>
-                </button>
-              );
-            })}
-          </div>
-
-          {/* 3. Testimonial Quote Body with Side Navigation Arrows */}
-          <div className="relative my-auto py-2">
-            {/* Left Nav Arrow Button */}
-            <button
-              type="button"
-              onClick={handlePrev}
-              disabled={activeStoryIdx === 0}
-              title="Testimoni Sebelumnya"
-              className={`absolute -left-3 sm:-left-5 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full flex items-center justify-center transition-all shadow-md ${
-                activeStoryIdx === 0
-                  ? 'opacity-30 bg-slate-100 text-slate-400 cursor-not-allowed'
-                  : 'bg-white hover:bg-amber-50 text-slate-700 hover:text-amber-700 border border-slate-200 hover:border-amber-300 cursor-pointer hover:scale-105 active:scale-95'
-              }`}
-            >
-              <ChevronLeft className="w-5 h-5" />
-            </button>
-
-            {/* Right Nav Arrow Button */}
-            <button
-              type="button"
-              onClick={handleNext}
-              disabled={activeStoryIdx === ALL_BLOG_TESTIMONIALS.length - 1}
-              title="Testimoni Selanjutnya"
-              className={`absolute -right-3 sm:-right-5 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full flex items-center justify-center transition-all shadow-md ${
-                activeStoryIdx === ALL_BLOG_TESTIMONIALS.length - 1
-                  ? 'opacity-30 bg-slate-100 text-slate-400 cursor-not-allowed'
-                  : 'bg-white hover:bg-amber-50 text-slate-700 hover:text-amber-700 border border-slate-200 hover:border-amber-300 cursor-pointer hover:scale-105 active:scale-95'
-              }`}
-            >
-              <ChevronRight className="w-5 h-5" />
-            </button>
-
+          {/* Quote Body */}
+          <div className="relative my-auto py-4">
             <motion.div
               key={activeStoryIdx}
-              initial={{ opacity: 0, scale: 0.98, y: 8 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.25 }}
-              className="px-6 sm:px-8 space-y-4 sm:space-y-6"
+              className="space-y-6"
             >
-              <div className="flex items-start gap-3 sm:gap-4">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center shrink-0 shadow-xs">
-                  <Quote className="w-5 h-5 sm:w-6 sm:h-6" />
-                </div>
-                <p className="text-base sm:text-lg md:text-xl font-medium italic text-slate-800 leading-relaxed pt-1 font-nunito">
-                  "{activeTestimonial.content}"
+              <div className="flex items-start gap-4">
+                <Quote className="w-8 h-8 text-slate-300 shrink-0 mt-1" />
+                <p className="font-serif-editorial text-xl sm:text-2xl md:text-[26px] text-[#0B1F3A] leading-relaxed">
+                  &ldquo;{activeTestimonial.content}&rdquo;
                 </p>
               </div>
 
-              {/* Alumni Author Details */}
-              <div className="pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+              <div className="pt-5 border-t border-slate-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                 <div>
-                  <div className="flex items-center gap-2">
-                    <h4 className="text-base sm:text-lg font-black text-slate-900 font-nunito">
+                  <div className="flex items-center gap-2.5">
+                    <h4 className="text-base font-bold text-[#0B1F3A]">
                       {activeTestimonial.name}
                     </h4>
-                    <span className="px-2.5 py-0.5 rounded-md text-[11px] font-bold bg-amber-100 text-amber-800 border border-amber-300 font-nunito">
-                      {activeTestimonial.year}
+                    <span className="text-xs font-semibold text-slate-500 border-l border-slate-300 pl-2.5">
+                      Angkatan {activeTestimonial.year}
                     </span>
                   </div>
-                  <p className="text-xs text-slate-500 mt-0.5 font-semibold font-nunito">
+                  <p className="text-xs text-slate-500 font-medium mt-0.5">
                     {activeTestimonial.role}
                   </p>
                 </div>
 
-                <div className="flex items-center gap-1.5 text-xs text-emerald-700 font-bold bg-emerald-50 px-3 py-1.5 rounded-xl border border-emerald-200 font-nunito">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                  <span>Testimoni Blogspot ELC</span>
+                <div className="inline-flex items-center gap-1.5 text-xs text-slate-600 font-medium">
+                  <CheckCircle2 className="w-4 h-4 text-[#0B1F3A]" />
+                  <span>Arsip Testimoni Resmi ELC</span>
                 </div>
               </div>
             </motion.div>
           </div>
 
-          {/* 4. Bottom Hint Dual Controls (Scroll AOS & Click) */}
-          <div className="pt-3 border-t border-amber-100 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-2 font-nunito">
-            <div className="flex items-center gap-2">
-              <span className="font-semibold text-slate-600">Navigasi:</span>
-              <span className="text-slate-400">Gunakan panah & tombol nama di atas, atau putar scroll mouse</span>
-            </div>
-            <div className="flex items-center gap-1.5 text-amber-700 font-bold">
-              <ChevronDown className="w-4 h-4 animate-bounce" />
-              <span>AOS Pinned Scroll Active</span>
+          {/* Bottom Controls */}
+          <div className="pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+            <span className="hidden sm:inline">
+              Gulir halaman atau gunakan panah untuk membaca kisah alumni lainnya.
+            </span>
+            <div className="flex items-center gap-2 ml-auto">
+              <button
+                type="button"
+                onClick={handlePrev}
+                disabled={activeStoryIdx === 0}
+                className={`p-2 rounded-lg border transition-colors ${
+                  activeStoryIdx === 0
+                    ? 'opacity-35 border-slate-200 text-slate-400 cursor-not-allowed'
+                    : 'border-slate-300 text-slate-700 hover:bg-slate-50 cursor-pointer'
+                }`}
+                aria-label="Testimoni Sebelumnya"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+              <button
+                type="button"
+                onClick={handleNext}
+                disabled={activeStoryIdx === ALL_BLOG_TESTIMONIALS.length - 1}
+                className={`p-2 rounded-lg border transition-colors ${
+                  activeStoryIdx === ALL_BLOG_TESTIMONIALS.length - 1
+                    ? 'opacity-35 border-slate-200 text-slate-400 cursor-not-allowed'
+                    : 'border-slate-300 text-slate-700 hover:bg-slate-50 cursor-pointer'
+                }`}
+                aria-label="Testimoni Selanjutnya"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
             </div>
           </div>
         </div>
@@ -205,4 +163,3 @@ export const AOSPinnedStoriesStream: React.FC = () => {
     </div>
   );
 };
-

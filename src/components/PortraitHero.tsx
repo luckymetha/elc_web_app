@@ -1,4 +1,4 @@
-import { ArrowRight, Award, Sparkles } from 'lucide-react';
+import { ArrowRight, CheckCircle2 } from 'lucide-react';
 
 interface PortraitHeroProps {
   onOpenRegister: (programName?: string) => void;
@@ -7,104 +7,106 @@ interface PortraitHeroProps {
 
 export const PortraitHero: React.FC<PortraitHeroProps> = ({
   onOpenRegister,
-  onExplorePrograms
+  onExplorePrograms,
 }) => {
   return (
-    <section className="relative overflow-hidden pt-10 pb-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-amber-50/60 via-[#fbfbf9] to-amber-50/30 font-nunito">
-      {/* Soft Background Accents */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-amber-100/50 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-96 h-96 bg-orange-100/40 rounded-full blur-3xl pointer-events-none" />
+    <section className="bg-white border-b border-slate-200/80 pt-10 pb-14 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+          {/* Left Editorial Column */}
+          <div className="lg:col-span-7 space-y-6">
+            <div className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.14em] text-slate-500">
+              <span className="w-2 h-2 rounded-full bg-[#C81E1E]" />
+              <span>LKP &amp; LPK Resmi • Ciparay &amp; Pacet, Kab. Bandung</span>
+            </div>
 
-      <div className="max-w-5xl mx-auto space-y-8 relative z-10">
-        
-        {/* Top Text Content */}
-        <div className="text-center space-y-5 max-w-4xl mx-auto">
-          {/* Established Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-amber-200/90 text-amber-900 text-xs font-bold shadow-2xs">
-            <Award className="w-4 h-4 text-amber-500" />
-            <span>Berdiri Sejak 1992 • Izin Disnaker 1994 & Disdik 2004</span>
+            <h1 className="text-4xl sm:text-5xl lg:text-[54px] font-extrabold text-[#0B1F3A] tracking-tight leading-[1.1]">
+              Kuasai Bahasa Inggris &amp; Keahlian Kerja{' '}
+              <span className="font-serif-editorial italic font-normal text-[#C81E1E]">
+                Tanpa Beban.
+              </span>
+            </h1>
+
+            <p className="text-base sm:text-lg text-slate-600 max-w-2xl leading-relaxed font-normal">
+              Pusat kursus Bahasa Inggris komunikatif, Lab Komputer perkantoran mandiri, dan Lembaga Pelatihan Kerja (LPK) bersertifikat BNSP sejak 1992. Dibina langsung oleh{' '}
+              <strong className="font-semibold text-slate-900">Mr. Entis Sutisna</strong>.
+            </p>
+
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs font-medium text-slate-600 pt-1">
+              <span className="inline-flex items-center gap-1.5">
+                <CheckCircle2 className="w-4 h-4 text-[#0B1F3A]" />
+                Izin Disnaker (1994) &amp; Disdik (2004)
+              </span>
+              <span className="inline-flex items-center gap-1.5">
+                <CheckCircle2 className="w-4 h-4 text-[#0B1F3A]" />
+                Praktik 1 Siswa 1 Komputer
+              </span>
+              <span className="inline-flex items-center gap-1.5">
+                <CheckCircle2 className="w-4 h-4 text-[#0B1F3A]" />
+                Uji Kompetensi BNSP Resmi
+              </span>
+            </div>
+
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-2">
+              <button
+                type="button"
+                onClick={() => onOpenRegister()}
+                className="px-6 py-3.5 rounded-lg bg-[#0B1F3A] hover:bg-[#14335c] text-white font-semibold text-sm transition-colors flex items-center justify-center gap-2 cursor-pointer"
+              >
+                <span>Konsultasi &amp; Daftar Program</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+
+              <button
+                type="button"
+                onClick={onExplorePrograms}
+                className="px-6 py-3.5 rounded-lg bg-white hover:bg-slate-50 border border-slate-300 text-slate-800 font-semibold text-sm transition-colors flex items-center justify-center cursor-pointer"
+              >
+                <span>Lihat Kurikulum &amp; Biaya</span>
+              </button>
+            </div>
           </div>
 
-          {/* Main Headline */}
-          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-[1.15]">
-            Kuasai Bahasa Inggris & Komputer{' '}
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-amber-600 via-orange-600 to-rose-600">
-              Tanpa Beban Bersama ELC
-            </span>
-          </h1>
-
-          {/* Subtitle Narrative */}
-          <p className="text-sm sm:text-base text-slate-600 max-w-2xl mx-auto leading-relaxed font-semibold">
-            Pusat kursus Bahasa Inggris komunikatif, Lab Komputer perkantoran mandiri, dan Lembaga Pelatihan Kerja (LPK) resmi BNSP di Ciparay & Pacet, Kabupaten Bandung. Dibina langsung oleh <strong>Mr. Entis Sutisna</strong> (Juara 2 Jambore PTK PNF Jawa Barat).
-          </p>
-
-          {/* Action Buttons */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 pt-2">
-            <button
-              onClick={() => onOpenRegister()}
-              className="w-full sm:w-auto px-8 py-3.5 rounded-2xl bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 hover:brightness-105 text-white font-black text-xs sm:text-sm shadow-lg shadow-orange-500/25 transition-all flex items-center justify-center gap-2 cursor-pointer"
-            >
-              <span>Daftar Siswa Baru</span>
-              <ArrowRight className="w-4 h-4" />
-            </button>
-
-            <button
-              onClick={onExplorePrograms}
-              className="w-full sm:w-auto px-7 py-3.5 rounded-2xl bg-white hover:bg-amber-50/70 border border-amber-200 text-slate-800 font-extrabold text-xs sm:text-sm transition-all flex items-center justify-center gap-2 cursor-pointer shadow-2xs"
-            >
-              <span>Lihat Paket Kelas & Biaya</span>
-            </button>
-          </div>
-        </div>
-
-        {/* Visual Banner Siswa Belajar (Aesthetic Learning Atmosphere) */}
-        <div className="relative rounded-3xl overflow-hidden border border-amber-200/80 shadow-xl bg-white p-2 sm:p-3">
-          <div className="relative h-64 sm:h-80 md:h-96 rounded-2xl overflow-hidden">
-            <img 
-              src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1600&q=80" 
-              alt="Suasana Belajar Siswa di ELC" 
-              className="w-full h-full object-cover object-center filter saturate-110"
-            />
-            {/* Subtle Gradient Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/30 to-transparent flex flex-col justify-end p-6 sm:p-8 text-white">
-              <div className="flex flex-wrap items-center gap-2 mb-2">
-                <span className="px-3 py-1 bg-amber-500 text-white text-xs font-black rounded-full flex items-center gap-1.5 shadow-xs">
-                  <Sparkles className="w-3.5 h-3.5" />
-                  <span>Metode Belajar Tanpa Beban</span>
-                </span>
-                <span className="px-3 py-1 bg-white/20 backdrop-blur-md text-white text-xs font-bold rounded-full">
-                  Suasana Hangat, Interaktif & Percaya Diri
-                </span>
+          {/* Right Framed Editorial Photography */}
+          <div className="lg:col-span-5">
+            <div className="relative rounded-2xl overflow-hidden border border-slate-200 bg-slate-100 aspect-[4/3] lg:aspect-[4/4]">
+              <img
+                src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1200&q=80"
+                alt="Suasana kelas interaktif di English Lovers Club Ciparay"
+                className="w-full h-full object-cover object-center"
+              />
+              <div className="absolute bottom-4 left-4 right-4 bg-white/95 backdrop-blur-xs border border-slate-200 rounded-xl p-4 shadow-sm">
+                <p className="text-[11px] font-bold uppercase tracking-wider text-[#C81E1E]">
+                  Active Learning Environment
+                </p>
+                <p className="text-sm font-bold text-[#0B1F3A] mt-0.5">
+                  &ldquo;Bukan sekadar teori — langsung praktik berbicara &amp; kerja kantor.&rdquo;
+                </p>
               </div>
-              <h2 className="text-xl sm:text-2xl md:text-3xl font-black max-w-2xl leading-tight">
-                "Bukan Hanya Pintar Teori, Tapi Mahir Berbicara & Mengoperasikan Komputer Terapan"
-              </h2>
             </div>
           </div>
         </div>
 
-        {/* Quick Trust Highlights Banner */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-4xl mx-auto text-left">
-          <div className="p-4 bg-white rounded-2xl border border-amber-200/80 shadow-2xs">
-            <p className="text-xl font-black text-amber-600">1992</p>
-            <p className="text-xs text-slate-500 font-bold">Tahun Berdiri ELC</p>
+        {/* Clean Institutional Metrics Strip */}
+        <div className="mt-12 pt-8 border-t border-slate-200 grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div>
+            <p className="text-2xl sm:text-3xl font-extrabold text-[#0B1F3A] tracking-tight">1992</p>
+            <p className="text-xs text-slate-500 font-medium mt-1">Tahun Berdiri di Ciparay</p>
           </div>
-          <div className="p-4 bg-white rounded-2xl border border-amber-200/80 shadow-2xs">
-            <p className="text-xl font-black text-emerald-600">5.000+</p>
-            <p className="text-xs text-slate-500 font-bold">Alumni Berhasil</p>
+          <div>
+            <p className="text-2xl sm:text-3xl font-extrabold text-[#0B1F3A] tracking-tight">5.000+</p>
+            <p className="text-xs text-slate-500 font-medium mt-1">Alumni Lulus &amp; Bekerja</p>
           </div>
-          <div className="p-4 bg-white rounded-2xl border border-amber-200/80 shadow-2xs">
-            <p className="text-xl font-black text-orange-600">BNSP & Disdik</p>
-            <p className="text-xs text-slate-500 font-bold">Legalitas Resmi</p>
+          <div>
+            <p className="text-2xl sm:text-3xl font-extrabold text-[#0B1F3A] tracking-tight">BNSP</p>
+            <p className="text-xs text-slate-500 font-medium mt-1">Terakreditasi Disnaker &amp; Disdik</p>
           </div>
-          <div className="p-4 bg-white rounded-2xl border border-amber-200/80 shadow-2xs">
-            <p className="text-xl font-black text-rose-600">Juara 2</p>
-            <p className="text-xs text-slate-500 font-bold">Jambore PTK Jawa Barat</p>
+          <div>
+            <p className="text-2xl sm:text-3xl font-extrabold text-[#0B1F3A] tracking-tight">Juara 2</p>
+            <p className="text-xs text-slate-500 font-medium mt-1">Jambore PTK PNF Jawa Barat</p>
           </div>
         </div>
-
       </div>
     </section>
   );
 };
-
